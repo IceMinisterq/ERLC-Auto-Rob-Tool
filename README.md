@@ -2,7 +2,7 @@
 
 Discord Server: https://discord.gg/dEJfZnfnbn
 
-![Screenshot of the ERLC Auto-Rob Tool](https://i.imgur.com/tK1av0Y.png)
+![Screenshot of the ERLC Auto-Rob Tool](https://i.imgur.com/cgeb0fE.png)
 
 ## Overview
 
