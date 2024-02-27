@@ -44,7 +44,7 @@ public class ATM
 
     public static void StartProcess()
     {
-        Console.WriteLine($"Starting process in {StartTime.ToString()}");
+        Console.WriteLine($"i ~ Starting process in {StartTime.ToString()}");
         Roblox.FocusRoblox();
         Thread.Sleep(StartTime * 1000);
         
@@ -52,7 +52,7 @@ public class ATM
 
         if (borderX == 0 && borderY == 0)
         {
-            Console.WriteLine("Could not determine ATM Firewall's Frame!");
+            Console.WriteLine("! ~ Could not determine ATM Firewall's Frame!");
             Thread.Sleep(1000);
             return;
         }
@@ -69,47 +69,56 @@ public class ATM
         
         while (true)
         {
-            (borderX, borderY) = Screen.LocateColorInScreen(BorderColor);
-            
-            if (borderX == 0 && borderY == 0)
+            try
             {
-                Console.WriteLine("Could not determine ATM Firewall's Frame!");
-                Thread.Sleep(1000);
-                break;
-            }
-            
-            var colorToFind = GetColorToFind();
-            var (foundColorPosX, foundColorPosY) = Screen.FindColorInArea(
-                colorToFind, colorToFind, 
-                2, 
-                fromX, toX,
-                fromY, toY
-            );
-            
-            if (foundColorPosX == 0 && foundColorPosY == 0)
-            {
-                Console.WriteLine("Could not determine Color position in ATM's Firewall Frame!");
-                break;
-            }
+                (borderX, borderY) = Screen.LocateColorInScreen(BorderColor);
 
-            Console.WriteLine($"Color to to detect : {colorToFind.R},{colorToFind.G},{colorToFind.B}");
-            Mouse.SetMousePos(foundColorPosX, foundColorPosY);
-            
-            while (true)
-            {
-                var textColor = Screen.GetColorAtPixel(foundColorPosX, foundColorPosY);
-                
-                if (!Screen.AreColorsClose(textColor, colorToFind, 5)) {
-                    Mouse.RightClick();
-                    Console.WriteLine("Right Clicking...");
+                if (borderX == 0 && borderY == 0)
+                {
+                    Console.WriteLine("! ~ Could not determine ATM Firewall's Frame!");
+                    Thread.Sleep(1000);
                     break;
                 }
+
+                var colorToFind = GetColorToFind();
+                var (foundColorPosX, foundColorPosY) = Screen.FindColorInArea(
+                    colorToFind, colorToFind,
+                    2,
+                    fromX, toX,
+                    fromY, toY
+                );
+
+                if (foundColorPosX == 0 && foundColorPosY == 0)
+                {
+                    Console.WriteLine("! ~ Could not determine Color position in ATM's Firewall Frame!");
+                    break;
+                }
+
+                Console.WriteLine($"i ~ Color to to detect : {colorToFind.R},{colorToFind.G},{colorToFind.B}");
+                Mouse.SetMousePos(foundColorPosX, foundColorPosY);
+
+                while (true)
+                {
+                    var textColor = Screen.GetColorAtPixel(foundColorPosX, foundColorPosY);
+
+                    if (!Screen.AreColorsClose(textColor, colorToFind, 5))
+                    {
+                        Mouse.RightClick();
+                        Console.WriteLine("i ~ Right Clicking...");
+                        break;
+                    }
+                }
+
+                Console.WriteLine("i ~ Switching to the new Color in 1 seconds");
+                Thread.Sleep(1000);
             }
-            
-            Console.WriteLine("Switching to the new Color in 1 seconds");
-            Thread.Sleep(1000);
+            catch (ArgumentOutOfRangeException Ex)
+            {
+                Console.WriteLine($"! ~ Exception during callback: {Ex.Message}");
+                return;
+            }
         }
-        
-        Thread.Sleep(1000);
+
+        Console.WriteLine("i ~ Robbing Finished!");
     }
 }
