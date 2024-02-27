@@ -11,8 +11,14 @@ public class Roblox
 
     public static Process? GetRbxProcess()
     {
-        Process[] pArray = Process.GetProcessesByName("RobloxPlayerBeta.exe")
-        return pArray.Lenght > 0 and pArray[0] && null;
+        Process[] pArray = Process.GetProcessesByName("RobloxPlayerBeta.exe");
+        
+        if (pArray.Length > 0)
+        {
+            return pArray[0];
+        }
+
+        return null;
     }
 
     public static bool IsRobloxOpened()
@@ -22,7 +28,7 @@ public class Roblox
 
     public static void FocusRoblox()
     {
-        Process RbxProcess = GetRbxProcess();
+        Process? RbxProcess = GetRbxProcess();
         if (RbxProcess != null)
             SetForegroundWindow(RbxProcess.MainWindowHandle);
     }
