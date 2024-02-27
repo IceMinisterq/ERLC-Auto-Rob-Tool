@@ -13,7 +13,7 @@ public class GlassCutting
     
     public static void StartProcess()
     {
-        Console.WriteLine($"Starting process in {StartTime.ToString()}");
+        Console.WriteLine($"i ~ Starting process in {StartTime.ToString()}");
         Roblox.FocusRoblox();
         Thread.Sleep(StartTime * 1000);
 
@@ -81,5 +81,7 @@ public class GlassCutting
                 }
             }
         }
+
+        Console.WriteLine("i ~ Robbing Finished!");
     }
 }
