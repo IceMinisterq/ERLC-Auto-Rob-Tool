@@ -11,7 +11,8 @@ public class Roblox
 
     public static Process? GetRbxProcess()
     {
-        return Process.GetProcessesByName("RobloxPlayerBeta")[0];
+        Process[] pArray = Process.GetProcessesByName("RobloxPlayerBeta.exe")
+        return pArray.Lenght > 0 and pArray[0] && null;
     }
 
     public static bool IsRobloxOpened()
