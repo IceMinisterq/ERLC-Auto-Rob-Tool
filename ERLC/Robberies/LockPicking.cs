@@ -9,7 +9,7 @@ public class LockPicking
     
     public static void StartProcess()
     {
-        Console.WriteLine($"Starting process in {StartTime.ToString()}");
+        Console.WriteLine($"i ~ Starting process in {StartTime.ToString()}");
         Roblox.FocusRoblox();
         Thread.Sleep(StartTime * 1000);
         
@@ -18,11 +18,11 @@ public class LockPicking
 
         if (linePosX == 0 && linePosY == 0)
         {
-            Console.WriteLine("LockPicking line could not be found !");
+            Console.WriteLine("! ~ LockPicking line could not be found !");
             return;
         }
         
-        Console.WriteLine($"Found Line at {linePosY},{linePosY}");
+        Console.WriteLine($"i ~ Found Line at {linePosY},{linePosY}");
         
         for (var rectI = 1; rectI < 7; rectI ++) {
             var x = linePosX + (83 * rectI);
@@ -44,5 +44,7 @@ public class LockPicking
                 }
             }
         }
+
+        Console.WriteLine("i ~ Robbing Finished!");
     }
 }
