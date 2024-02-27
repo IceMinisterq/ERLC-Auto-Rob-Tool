@@ -6,7 +6,7 @@ namespace ERLC;
 
 public class Roblox
 {
-    [DllImport("USER32.DLL")]
+    [DllImport("user32.dll")]
     public static extern bool SetForegroundWindow(IntPtr hWnd);
 
     public static Process? GetRbxProcess()
