@@ -2,7 +2,7 @@
 
 Discord Server: https://discord.gg/dEJfZnfnbn
 
-![Screenshot of the ERLC Auto-Rob Tool](https://i.imgur.com/FThoUFR.png)
+![Screenshot of the ERLC Auto-Rob Tool](https://github.com/IceMinisterq/ERLC-Auto-Rob-Tool/assets/86623018/49334be4-ad9c-46cf-87a1-63c89d856d9b)
 
 ## Overview
 
@@ -13,6 +13,12 @@ The ERLC Auto-Rob Tool is a handy utility designed to automate the minigames in 
 - 🚀 Automated Minigames: Easily automate lockpicking, ATM robberies, and glass cutting (jewelry robbing).
 - ⚙️ Simple Usage: Just open the `.exe` file, select the desired minigame option, and let the tool do the work for you.
 - 🕒 Time-Saving: Save time and effort by automating repetitive tasks, allowing you to focus on other aspects of the game.
+
+## Requirements
+
+1. A Working Computer
+2. Windows HDR Mode Disabled ([Guide Here](https://pureinfotech.com/enable-auto-hdr-games-windows-11/#:~:text=Open%20Settings.-,Click%20on%20System.,%E2%80%9CUse%20HDR%E2%80%9D%20toggle%20switch.))
+3. The [.NET 6.0 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-6.0.27-windows-x64-installer)
 
 ## Usage
 
