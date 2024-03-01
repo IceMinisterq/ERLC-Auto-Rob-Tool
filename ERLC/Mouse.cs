@@ -99,22 +99,22 @@ namespace ERLC
             SendMouseInput(MouseFlags.MOUSEEVENTF_RIGHTUP);
         }
 
-        public static void RightClick(int time = 1)
+        // --> Thank you IceMinister for mixing up the Mouse1 and Mouse2
+        public static void LeftClick(int time = 1)
         {
             Mouse1Down();
             Thread.Sleep(time);
             Mouse1Up();
         }
-        
-        public static void LeftClick(int time = 1)
+
+        public static void RightClick(int time = 1)
         {
             Mouse2Down();
             Thread.Sleep(time);
             Mouse2Up();
         }
         
-
-        public static void SetMousePos(int x, int y) // black magic
+        public static void SetMousePos(int x, int y) // black magic - Credits to @MakeSureDudeDies
         {
             var mouseInput = new Input();
             mouseInput.type = SendInputEventType.InputMouse;
