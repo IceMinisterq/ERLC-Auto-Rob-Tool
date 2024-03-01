@@ -1,10 +1,13 @@
 using System.Drawing;
+using System.Runtime.CompilerServices;
+
+#pragma warning disable CA1416
 
 namespace ERLC.Robberies;
-
 public class ATM
 {
-    const int StartTime = 2;
+    private const int StartTime = 2;
+    
     private static Color BorderColor = ColorTranslator.FromHtml("#1B2A35");
     
     const int borderSizeX = 822;
@@ -17,21 +20,19 @@ public class ATM
 
     private static Color GetColorToFind()
     {
-        var fromX = (centerX) + 10;
-        var toX = fromX + 210;
-        var fromY = borderY + 80;
-        var toY = borderY + 100;
+        int fromX = (centerX) + 10;
+        int toX = fromX + 210;
+        int fromY = borderY + 80;
+        int toY = borderY + 100;
     
-        var screen = new Bitmap(ScreenWidth, ScreenHeight);
-        Graphics.FromImage(screen).CopyFromScreen(0, 0, 0, 0, screen.Size);
-    
-        var highestColor = Color.Black;
+        Bitmap screen = Screen.TakeScreenshot();
+        Color highestColor = Color.Black;
 
-        for (var x = fromX; x < toX; x++)
+        for (int x = fromX; x < toX; x++)
         {
-            for (var y = fromY; y < toY; y++)
+            for (int y = fromY; y < toY; y++)
             {
-                var pColor = screen.GetPixel(x, y);
+                Color pColor = screen.GetPixel(x, y);
                 if (pColor.R > highestColor.R & pColor.G > highestColor.G & pColor.B > highestColor.B)
                 {
                     highestColor = pColor;
@@ -44,43 +45,43 @@ public class ATM
 
     public static void StartProcess()
     {
-        Console.WriteLine($"i ~ Starting process in {StartTime.ToString()}");
+        Console.WriteLine($"i ~ Starting process in {StartTime}");
         Roblox.FocusRoblox();
-        Thread.Sleep(StartTime * 1000);
-        
-        (borderX, borderY) = Screen.LocateColorInScreen(BorderColor);
 
+        Thread.Sleep(StartTime * 1000);
+
+        (borderX, borderY) = Screen.LocateColor(BorderColor);
         if (borderX == 0 && borderY == 0)
         {
-            Console.WriteLine("! ~ Could not determine ATM Firewall's Frame!");
+            Console.WriteLine("! ~ Could not find ATM Firewall's Frame!");
             Thread.Sleep(1000);
             return;
         }
         
         centerX =  borderX + (borderSizeX / 2);
         centerY =  borderY + (borderSizeY / 2);
-        
-        // Dimension of the frame with the codes
-        var fromX = borderX + 82;
-        var toX   = (borderX + borderSizeX) - 84;
 
-        var fromY = centerY - 128;
-        var toY   = (borderY + borderSizeY) - 73;
+        // Dimension of the frame with the codes
+        int fromX = borderX + 82;
+        int toX   = (borderX + borderSizeX) - 84;
+
+        int fromY = centerY - 128;
+        int toY   = (borderY + borderSizeY) - 73;
         
         while (true)
         {
             try
             {
-                (borderX, borderY) = Screen.LocateColorInScreen(BorderColor);
+                (borderX, borderY) = Screen.LocateColor(BorderColor);
 
                 if (borderX == 0 && borderY == 0)
                 {
-                    Console.WriteLine("! ~ Could not determine ATM Firewall's Frame!");
+                    Console.WriteLine("! ~ Could not find ATM Firewall's Frame!");
                     Thread.Sleep(1000);
                     break;
                 }
 
-                var colorToFind = GetColorToFind();
+                Color colorToFind = GetColorToFind();
                 var (foundColorPosX, foundColorPosY) = Screen.FindColorInArea(
                     colorToFind, colorToFind,
                     2,
@@ -90,7 +91,7 @@ public class ATM
 
                 if (foundColorPosX == 0 && foundColorPosY == 0)
                 {
-                    Console.WriteLine("! ~ Could not determine Color position in ATM's Firewall Frame!");
+                    Console.WriteLine("! ~ Could not find Color position in ATM's Firewall Frame!");
                     break;
                 }
 
@@ -99,22 +100,22 @@ public class ATM
 
                 while (true)
                 {
-                    var textColor = Screen.GetColorAtPixel(foundColorPosX, foundColorPosY);
+                    Color textColor = Screen.GetColorAtPixel(foundColorPosX, foundColorPosY);
 
                     if (!Screen.AreColorsClose(textColor, colorToFind, 5))
                     {
-                        Mouse.RightClick();
-                        Console.WriteLine("i ~ Right Clicking...");
+                        Mouse.LeftClick();
+                        Console.WriteLine("i ~ Clicked...");
                         break;
                     }
                 }
 
-                Console.WriteLine("i ~ Switching to the new Color in 1 seconds");
-                Thread.Sleep(1000);
+                Console.WriteLine("i ~ Switching to the new Color in 0.5 seconds...");
+                Thread.Sleep(500);
             }
             catch (ArgumentOutOfRangeException Ex)
             {
-                Console.WriteLine($"! ~ Exception during callback: {Ex.Message}");
+                Console.WriteLine($"! ~ Exception during automation: {Ex.Message}\n\nDid you select the correct minigame?");
                 return;
             }
         }

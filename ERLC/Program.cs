@@ -1,5 +1,6 @@
 using System;
-
+using System.Collections.Generic;
+using System.Diagnostics;
 using ERLC;
 using ERLC.Robberies;
 
@@ -10,36 +11,42 @@ class Program
         Console.Title = "ER:LC AutoRob Tool";
         Console.TreatControlCAsInput = false;
 
-        const string startMessage = @"// Choose a Robbery Method:
+        string startMessage = String.Join(Environment.NewLine,
+            "\t// Choose a Robbery Method:",
+            "\n\t\t[1] LockPick        [3] Auto ATM",
+            "\t\t[2] Glass Cutting   [4] Car Crowbar",
+            "\t\t[5] Exit",
 
-            [1] LockPick        [3] Auto ATM
-            [2] Glass Cutting   [4] Exit
+            "\n\tDISCLAIMER: Use this tool responsibly and in accordance with ER:LC's terms of service.",
+            "\tWe, the developers and contributors of this tool are not responsible",
+            "\tfor any consequences resulting from the misuse of the tool.",
 
-        DISCLAIMER: Use this tool responsibly and in accordance with ER:LC's terms of service.
-        We, the developers and contributors of this tool are not responsible
-        for any consequences resulting from the misuse of the tool.
+            "\n\tMake sure you downloaded the program from the original github link available below.",
+            "\tThis program is free - if you bought it, you got scammed.",
+            "\thttps://github.com/IceMinisterq/ERLC-Auto-Rob-Tool",
 
-        Make sure you downloaded the program from the original github link available below.
-        This program is free - if you bought it, you got scammed.
+            "\n\t> Last Update: 01/03/24",
+            "\t> Version    : 1.1.0",
+            "\t> By Ketami & Liker"
+        );
 
-        > Last Update : 27/02/24
-        > Version     : 1.0.0
-        > By Ketami & Liker (https://github.com/IceMinisterq/ERLC-Auto-Rob-Tool)
-        ";
-
-        if (!ERLC.Roblox.IsRobloxOpened())
+        if (!Roblox.IsRobloxRunning())
         {
-            Console.WriteLine("! ~ Roblox is not opened! Please join ER:LC in order to use the AutoRob.");
-            Console.ReadKey(true);
+            Console.WriteLine("i ~ Waiting for Roblox to open...");
 
-            System.Environment.Exit(0);
+            while (!Roblox.IsRobloxRunning()) // --> Feel free to make a PR if you guys know how to wait more efficiently
+            {
+                Thread.Sleep(500);
+            }
         }
 
         while (true)
         {
             Console.Clear();
-            Console.WriteLine(startMessage);
-            string option = Console.ReadKey(true).KeyChar.ToString();
+            Console.Write(startMessage + "\n\n$ ~ Choice: ");
+            
+            string option = Console.ReadKey().KeyChar.ToString();
+            Console.Write("\n\n");
 
             switch (option)
             {
@@ -53,10 +60,13 @@ class Program
                     ATM.StartProcess();
                     break;
                 case "4":
+                    Crowbar.StartProcess();
+                    break;
+                case "5":
                     Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine($"! ~ Choose a correct option! (Got option \"{option}\")");
+                    Console.WriteLine($"! ~ Choose a correct option!");
                     break;
             }
 

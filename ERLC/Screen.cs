@@ -1,6 +1,8 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 
+#pragma warning disable CA1416
+
 namespace ERLC
 {
     public static class Screen
@@ -11,38 +13,47 @@ namespace ERLC
         public static int ScreenWidth;
         public static int ScreenHeight;
         
-        public static int centerX = ScreenWidth/2, centerY = ScreenHeight/2;
+        public static int centerX = ScreenWidth / 2, centerY = ScreenHeight / 2;
 
         [DllImport("user32.dll")]
-        private static extern IntPtr GetDC(IntPtr hwnd);
+        static extern IntPtr GetDC(IntPtr hwnd);
+
         [DllImport("user32.dll")]
-        private static extern IntPtr GetDesktopWindow();
+        static extern IntPtr GetDesktopWindow();
+        
         [DllImport("user32.dll")]
-        static extern Int32 ReleaseDC(IntPtr hwnd, IntPtr hdc);
+        static extern int ReleaseDC(IntPtr hwnd, IntPtr hdc);
+        
         [DllImport("gdi32.dll", EntryPoint = "GetDeviceCaps")]
-        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+        static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+        
         [DllImport("gdi32.dll")]
         static extern uint GetPixel(IntPtr hdc, int nXPos, int nYPos);
 
         static Screen()
         {
-            var desktopHandle = GetDesktopWindow();
-            var desktopDc = GetDC(desktopHandle);
+            IntPtr desktopDc = GetDC(GetDesktopWindow());
 
             ScreenWidth = GetDeviceCaps(desktopDc, DesktopHorzres);
             ScreenHeight = GetDeviceCaps(desktopDc, DesktopVertres);
         }
         
-        public static (int, int) LocateColorInScreen(Color color, int tolerance = 0)
+        static public Bitmap TakeScreenshot()
         {
-            var screen = new Bitmap(ScreenWidth, ScreenHeight);
-            Graphics.FromImage(screen).CopyFromScreen(0, 0, 0, 0, screen.Size);
-            
-            for (var y = 0; y < ScreenHeight; y ++)
+            Bitmap nBitmap = new Bitmap(ScreenWidth, ScreenHeight);
+            Graphics.FromImage(nBitmap).CopyFromScreen(0, 0, 0, 0, nBitmap.Size);
+
+            return nBitmap;
+        }
+
+        public static (int, int) LocateColor(Color color, int tolerance = 0)
+        {
+            Bitmap screen = TakeScreenshot();
+            for (int y = 0; y < ScreenHeight; y++)
             {
-                for (var x = 0; x < ScreenWidth; x++)
+                for (int x = 0; x < ScreenWidth; x++)
                 {
-                    var pColor = screen.GetPixel(x, y);
+                    Color pColor = screen.GetPixel(x, y);
                     if (pColor == color || AreColorsClose(color, pColor, tolerance))
                         return (x, y);
                 }
@@ -53,14 +64,12 @@ namespace ERLC
         
         public static (int, int) FindColorInArea(Color color1, Color color2, int tolerance, int fromX, int toX, int fromY, int toY)
         {
-            var screen = new Bitmap(ScreenWidth, ScreenHeight);
-            Graphics.FromImage(screen).CopyFromScreen(0, 0, 0, 0, screen.Size);
-            
-            for (var x = fromX; x < toX; x++)
+            Bitmap screen = TakeScreenshot();
+            for (int x = fromX; x < toX; x++)
             {
-                for (var y = fromY; y < toY; y++)
+                for (int y = fromY; y < toY; y++)
                 {
-                    var pColor = screen.GetPixel(x, y);
+                    Color pColor = screen.GetPixel(x, y);
                     if (
                         (pColor == color1) ||
                         (pColor == color2) ||
@@ -76,8 +85,8 @@ namespace ERLC
 
         public static Color GetColorAtPixel(int x, int y)
         {
-            var hdc = GetDC(IntPtr.Zero);
-            var pixel = GetPixel(hdc, x, y);
+            IntPtr hdc = GetDC(IntPtr.Zero);
+            uint pixel = GetPixel(hdc, x, y);
             ReleaseDC(IntPtr.Zero, hdc);
 
             return Color.FromArgb(255,
