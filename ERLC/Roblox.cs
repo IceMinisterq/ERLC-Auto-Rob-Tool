@@ -2,34 +2,39 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-namespace ERLC;
-
-public class Roblox
+namespace ERLC
 {
-    [DllImport("user32.dll")]
-    public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-    public static Process? GetRbxProcess()
+    public class Roblox
     {
-        Process[] pArray = Process.GetProcessesByName("RobloxPlayerBeta");
-        
-        if (pArray.Length > 0)
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        public static Process? GetRbxProcess()
         {
-            return pArray[0];
+            Process[] pArray = Process.GetProcessesByName("RobloxPlayerBeta");
+            if (pArray.Length > 0)
+            {
+                return pArray[0];
+            }
+
+            return null;
         }
 
-        return null;
-    }
+        public static bool IsRobloxRunning()
+        {
+            return GetRbxProcess() != null;
+        }
 
-    public static bool IsRobloxOpened()
-    {
-        return GetRbxProcess() != null;
-    }
+        public static void FocusRoblox()
+        {
+            Process? RbxProcess = GetRbxProcess();
+            if (RbxProcess != null)
+            {
+                Console.WriteLine("i ~ Focusing Roblox in 0.5 seconds");
+                Thread.Sleep(500);
 
-    public static void FocusRoblox()
-    {
-        Process? RbxProcess = GetRbxProcess();
-        if (RbxProcess != null)
-            SetForegroundWindow(RbxProcess.MainWindowHandle);
+                SetForegroundWindow(RbxProcess.MainWindowHandle);
+            }
+        }
     }
 }
