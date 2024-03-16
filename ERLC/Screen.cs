@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 #pragma warning disable CA1416
 
@@ -13,8 +14,6 @@ namespace ERLC
         public static int ScreenWidth;
         public static int ScreenHeight;
         
-        public static int centerX = ScreenWidth / 2, centerY = ScreenHeight / 2;
-
         [DllImport("user32.dll")]
         static extern IntPtr GetDC(IntPtr hwnd);
 
@@ -65,10 +64,13 @@ namespace ERLC
         public static (int, int) FindColorInArea(Color color1, Color color2, int tolerance, int fromX, int toX, int fromY, int toY)
         {
             Bitmap screen = TakeScreenshot();
+
             for (int x = fromX; x < toX; x++)
             {
                 for (int y = fromY; y < toY; y++)
                 {
+                    //Mouse.SetMousePos(x, y);
+
                     Color pColor = screen.GetPixel(x, y);
                     if (
                         (pColor == color1) ||
@@ -90,17 +92,52 @@ namespace ERLC
             ReleaseDC(IntPtr.Zero, hdc);
 
             return Color.FromArgb(255,
-                (int)(pixel & 0x000000FF),
-                (int)((pixel & 0x0000FF00) >> 8),
-                (int)((pixel & 0x00FF0000) >> 16)
+                (int)(pixel & 0xFF),
+                (int)((pixel & 0xFF00) >> 8),
+                (int)((pixel & 0xFF0000) >> 16)
             );
         }
-        
+
         public static bool AreColorsClose(Color color1, Color color2, int maxDiff)
         {
             return Math.Abs(color1.R - color2.R) <= maxDiff &&
                    Math.Abs(color1.G - color2.G) <= maxDiff &&
                    Math.Abs(color1.B - color2.B) <= maxDiff;
         }
+        
+        public static double GetScale()
+        {
+            // If any if you reading this find this find a way to make it work with GetDpiForSystem from user32.dll? It wasn't working properly when i tried
+            try
+            {
+                var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop\WindowMetrics");
+
+                if (key != null)
+                {
+                    object? scaleValue = key.GetValue("AppliedDPI");
+                    if (scaleValue != null)
+                    {
+                        int dpi = Convert.ToInt32(scaleValue);
+                        double scale = 1;
+                        if (dpi != 96)
+                        {
+                            scale = (dpi / 96f);
+                        }
+                        
+                        return scale;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
+            return 1;
+        }
+        
+        // Default values are set for the Scale & Layout Setting (100%)
+        public static double SystemScaleMultiplier = Screen.GetScale();
     }
+    
 }

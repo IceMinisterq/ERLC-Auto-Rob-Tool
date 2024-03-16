@@ -5,10 +5,11 @@ public class GlassCutting
 {
     private const int StartTime = 1;
 
-    private static Color SquareColor = Color.FromArgb(255, 85, 255, 0);
+    private static Color SquareColor  = Color.FromArgb(255, 85, 255, 0);
     private static Color SquareColor0 = Color.FromArgb(255, 255, 0, 0);
 
-    private const int OFFSET = 20;
+    private static int OFFSET = (int)Math.Floor(23 * Screen.SystemScaleMultiplier);
+    private static int SEARCH_OFFSET = (int)Math.Floor(15 * Screen.SystemScaleMultiplier);
 
     public static void StartProcess()
     {
@@ -40,8 +41,8 @@ public class GlassCutting
                 (x, y) = Screen.FindColorInArea(
                     SquareColor, SquareColor0,
                     10,
-                    oldX - OFFSET, oldX + OFFSET,
-                    oldY - OFFSET, oldY + OFFSET
+                    oldX - SEARCH_OFFSET, oldX + SEARCH_OFFSET,
+                    oldY - SEARCH_OFFSET, oldY + SEARCH_OFFSET
                 );
             }
             else
@@ -59,7 +60,7 @@ public class GlassCutting
                 wasSquareFound = false;
                 findingAttempts++;
 
-                if (findingAttempts > 30)
+                if (findingAttempts > 25)
                 {
                     Console.WriteLine("i ~ Robbing Finished / Could not find green square!");
                     break;

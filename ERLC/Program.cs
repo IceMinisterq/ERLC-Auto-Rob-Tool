@@ -12,7 +12,7 @@ class Program
         Console.TreatControlCAsInput = false;
 
         string startMessage = String.Join(Environment.NewLine,
-            "\t// Choose a Robbery Method:",
+            $"\t// Choose a Robbery Method:",
             "\n\t\t[1] LockPick        [3] Auto ATM",
             "\t\t[2] Glass Cutting   [4] Car Crowbar",
             "\t\t[5] Exit",
@@ -25,11 +25,12 @@ class Program
             "\tThis program is free - if you bought it, you got scammed.",
             "\thttps://github.com/IceMinisterq/ERLC-Auto-Rob-Tool",
 
-            "\n\t> Last Update: 01/03/24",
-            "\t> Version    : 1.1.0",
-            "\t> By Ketami & Liker"
+            "\n\t> Last Update: 16/03/24",
+            "\t> Version    : 1.1.1",
+            "\t> By Ketami & Liker",
+            $"\t> Screen Scale Factor : {Screen.SystemScaleMultiplier}"
         );
-
+        
         if (!Roblox.IsRobloxRunning())
         {
             Console.WriteLine("i ~ Waiting for Roblox to open...");
@@ -44,7 +45,7 @@ class Program
         {
             Console.Clear();
             Console.Write(startMessage + "\n\n$ ~ Choice: ");
-            
+
             string option = Console.ReadKey().KeyChar.ToString();
             Console.Write("\n\n");
 

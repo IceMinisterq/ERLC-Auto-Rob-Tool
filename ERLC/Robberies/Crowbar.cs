@@ -36,7 +36,7 @@ public class Crowbar
                     Mouse.LeftClick();
                     Console.WriteLine("i ~ Clicked...");
 
-                    Thread.Sleep(500);
+                    Thread.Sleep(150);
                     break;
                 }
 

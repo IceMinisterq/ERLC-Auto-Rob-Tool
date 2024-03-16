@@ -5,13 +5,15 @@ public class LockPicking
 {
     private const int StartTime = 1;
     private static Color LineColor = ColorTranslator.FromHtml("#FFC903");
-
+    
     public static void StartProcess()
     {
         Console.WriteLine($"i ~ Starting process in {StartTime}");
         Roblox.FocusRoblox();
 
         Thread.Sleep(StartTime * 1000);
+
+        int barSizeOffset = (int)Math.Floor(83 * Screen.SystemScaleMultiplier);
 
         var (linePosX, linePosY) = Screen.LocateColor(LineColor, 0);
         if (linePosX == 0 && linePosY == 0)
@@ -24,8 +26,8 @@ public class LockPicking
 
         for (int rectI = 1; rectI < 7; rectI++)
         {
-            int x = linePosX + (83 * rectI);
-
+            int x = linePosX + (barSizeOffset * rectI);
+            //Mouse.SetMousePos(x, linePosY);
             while (true)
             {
                 Color color1 = Screen.GetColorAtPixel(x, linePosY + 10);
@@ -37,8 +39,10 @@ public class LockPicking
                 )
                 {
                     Mouse.LeftClick();
-
                     Mouse.SetMousePos(x, linePosY);
+                    Console.WriteLine("Switching to next bar");
+
+                    Thread.Sleep(110);
                     break;
                 }
             }

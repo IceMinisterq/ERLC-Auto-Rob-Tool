@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Text.Encodings.Web;
 
 #pragma warning disable CA1416
 
@@ -10,20 +11,18 @@ public class ATM
     
     private static Color BorderColor = ColorTranslator.FromHtml("#1B2A35");
     
-    const int borderSizeX = 822;
-    const int borderSizeY = 548;
+    static int borderSizeX = (int)(822 * Screen.SystemScaleMultiplier);
+    static int borderSizeY = (int)(548 * Screen.SystemScaleMultiplier);
 
     private static int centerX =  0, centerY = 0;
     private static int borderX =  0, borderY = 0;
     
-    static int ScreenWidth = Screen.ScreenWidth, ScreenHeight = Screen.ScreenHeight;
-
     private static Color GetColorToFind()
     {
-        int fromX = (centerX) + 10;
-        int toX = fromX + 210;
-        int fromY = borderY + 80;
-        int toY = borderY + 100;
+        int fromX = (centerX) + (int)(10 * Screen.SystemScaleMultiplier);
+        int toX = fromX + (int)(210 * Screen.SystemScaleMultiplier);
+        int fromY = borderY + (int)(80 * Screen.SystemScaleMultiplier);
+        int toY = borderY + (int)(100 * Screen.SystemScaleMultiplier);
     
         Bitmap screen = Screen.TakeScreenshot();
         Color highestColor = Color.Black;
